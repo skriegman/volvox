@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <VXA Version="1.1">
     <Simulator>
+        <EnableCilia>1</EnableCilia>
         <UsingLightSource>1</UsingLightSource>
         <UsingVolvox>1</UsingVolvox>
+        <VolvoxLightDelay>2</VolvoxLightDelay>
+        <VolvoxLightSensitiveTime>4000</VolvoxLightSensitiveTime>
+        <VolvoxRefractoryPeriod>300</VolvoxRefractoryPeriod>
         <LightPosX>0</LightPosX>
         <LightPosY>0</LightPosY>
         <LightPosZ>0</LightPosZ>
         <LightFunction>
             <mtCOS>
                 <mtMUL>
-                <mtCONST>0</mtCONST>
+                <mtCONST>60</mtCONST>
                 <mtVAR>t</mtVAR>
                 </mtMUL>
             </mtCOS>
         </LightFunction>
-        <EnableCilia>1</EnableCilia>
-        <CiliaFactorInLight>0</CiliaFactorInLight>
-        <CiliaDelayInLight>1000</CiliaDelayInLight>
-        <CiliaDecayInDark>1</CiliaDecayInDark>
-        <OnlySurfVoxOcclude>0</OnlySurfVoxOcclude>
         <FitnessFunction>
             <mtADD>
                 <mtMUL>
@@ -48,7 +47,7 @@
             <SlowDampingZ>0.01</SlowDampingZ>
         </Damping>
         <AttachDetach>
-            <EnableCollision>0</EnableCollision>
+            <EnableCollision>2</EnableCollision>
         </AttachDetach>
         <!-- <ForceField>
             <z_forcefield>

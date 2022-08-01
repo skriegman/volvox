@@ -14,14 +14,11 @@ DRAW_LIGHT_SOURCE = True
 
 BODY_DIAMETER = 5  # in voxels
 
-LIGHT_X = 35  # np.random.randint(0, 200)
-LIGHT_Y = 35  # np.random.randint(0, 200)
-LIGHT_Z = 5
+LIGHT_X = 50
+LIGHT_Y = 3
+LIGHT_Z = 4
 
 np.random.seed(SEED)
-
-# clear workspace (don't do this if other jobs are running in folder)
-sub.call("rm -r workspace", shell=True)
 
 # get new voxcraft build
 BUILD_DIR = "/users/s/k/skriegma/phototaxis/voxcraft-sim/build"
@@ -57,26 +54,10 @@ for layer in range(bz):
 
 
 # get random cilia field
-# cilia_forces = restricted_cilia(body, DEBUG=True)
-cilia_forces = 2*np.random.rand(bx,by,bz,3)-1
+cilia_forces = restricted_cilia(body, DEBUG=True)
+# cilia_forces = 2*np.random.rand(bx,by,bz,3)-1
+cilia_forces[:,:,:,2] = 0
 cilia_forces = cilia_forces.reshape(bz, 3*bx*by)
-
-# ##### Debug cilia #######
-
-# for z in range(bz):
-#     for c in range(2):
-#         cilia_forces[:,:,z,c][np.where(body[:,:,0] == 0)] = 0
-# cilia_forces[:,:,:,2] = 0
-
-# # normalize vectors
-# cilia_forces[:,:,:,:2] /= np.sqrt((cilia_forces[:,:,:,:2] ** 2).sum(-1))[..., np.newaxis]
-
-# print(body.shape())
-# # cilias = [restricted_cilia(body, DEBUG=False) for _ in range(1)]
-# cilias = [cilia_forces]
-# plot_cilia_vectors(body, cilias, plot_multiple=True, save_dir="cilia.pdf", l=1, scale=16, width=0.005)
-# exit()  
-# #########################
 
 # world
 wx,wy,wz = LIGHT_X+bx, LIGHT_Y+by, LIGHT_Z+bz
