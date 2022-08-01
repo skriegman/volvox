@@ -12,10 +12,10 @@ RECORD_HISTORY = True  # saves the behavior movie
 
 DRAW_LIGHT_SOURCE = True
 
-BODY_DIAMETER = 11  # in voxels
+BODY_DIAMETER = 5  # in voxels
 
-LIGHT_X = 30  # np.random.randint(0, 200)
-LIGHT_Y = 30  # np.random.randint(0, 200)
+LIGHT_X = 35  # np.random.randint(0, 200)
+LIGHT_Y = 35  # np.random.randint(0, 200)
 LIGHT_Z = 5
 
 np.random.seed(SEED)
@@ -57,8 +57,8 @@ for layer in range(bz):
 
 
 # get random cilia field
-cilia_forces = restricted_cilia(body, DEBUG=True)
-# cilia_forces = 2*np.random.rand(bx,by,bz,3)-1
+# cilia_forces = restricted_cilia(body, DEBUG=True)
+cilia_forces = 2*np.random.rand(bx,by,bz,3)-1
 cilia_forces = cilia_forces.reshape(bz, 3*bx*by)
 
 # ##### Debug cilia #######

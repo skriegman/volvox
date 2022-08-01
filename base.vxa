@@ -2,18 +2,22 @@
 <VXA Version="1.1">
     <Simulator>
         <UsingLightSource>1</UsingLightSource>
+        <UsingVolvox>1</UsingVolvox>
         <LightPosX>0</LightPosX>
         <LightPosY>0</LightPosY>
         <LightPosZ>0</LightPosZ>
         <LightFunction>
             <mtCOS>
+                <mtMUL>
+                <mtCONST>0</mtCONST>
                 <mtVAR>t</mtVAR>
+                </mtMUL>
             </mtCOS>
         </LightFunction>
         <EnableCilia>1</EnableCilia>
         <CiliaFactorInLight>0</CiliaFactorInLight>
         <CiliaDelayInLight>1000</CiliaDelayInLight>
-        <CiliaDecayInDark>10</CiliaDecayInDark>
+        <CiliaDecayInDark>1</CiliaDecayInDark>
         <OnlySurfVoxOcclude>0</OnlySurfVoxOcclude>
         <FitnessFunction>
             <mtADD>
@@ -44,9 +48,9 @@
             <SlowDampingZ>0.01</SlowDampingZ>
         </Damping>
         <AttachDetach>
-            <EnableCollision>1</EnableCollision>
+            <EnableCollision>0</EnableCollision>
         </AttachDetach>
-        <ForceField>
+        <!-- <ForceField>
             <z_forcefield>
                 <mtMUL>
                     <mtCONST>-0.01</mtCONST>
@@ -56,7 +60,7 @@
                     </mtGREATERTHAN>
                 </mtMUL>
             </z_forcefield>
-        </ForceField>
+        </ForceField> -->
     </Simulator>
     <Environment>
         <Thermal>
@@ -84,8 +88,8 @@
                 <Mechanical>
                     <isMeasured>1</isMeasured>
                     <isTarget>0</isTarget>
-                    <Cilia>0.3</Cilia>
-                    <LockZ>0</LockZ>
+                    <Cilia>1.2</Cilia>
+                    <LockZ>1</LockZ>
                     <Detachable>0</Detachable>
                     <lightSensitive>1</lightSensitive>
                     <MatModel>0</MatModel><!--0 = no failing-->
