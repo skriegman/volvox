@@ -19,16 +19,31 @@
             </mtCOS>
         </LightFunction>
         <FitnessFunction>
-            <mtADD>
-                <mtMUL>
-                    <mtVAR>y</mtVAR>
-                    <mtVAR>y</mtVAR>
-                </mtMUL>
-                <mtMUL>
-                    <mtVAR>x</mtVAR>
-                    <mtVAR>x</mtVAR>
-                </mtMUL>
-            </mtADD>
+            <mtSUB>
+                <mtCONST>0</mtCONST>
+                <mtADD>
+                    <mtMUL>
+                        <mtSUB>
+                            <mtVAR>y</mtVAR>
+                            <mtCONST>3</mtCONST>
+                        </mtSUB>
+                        <mtSUB>
+                            <mtVAR>y</mtVAR>
+                            <mtCONST>3</mtCONST>
+                        </mtSUB>
+                    </mtMUL>
+                    <mtMUL>
+                        <mtSUB>
+                            <mtVAR>x</mtVAR>
+                            <mtCONST>50</mtCONST>
+                        </mtSUB>
+                        <mtSUB>
+                            <mtVAR>x</mtVAR>
+                            <mtCONST>50</mtCONST>
+                        </mtSUB>
+                    </mtMUL>
+                </mtADD>
+            </mtSUB>
         </FitnessFunction>
         <Integration>
             <DtFrac>0.95</DtFrac>

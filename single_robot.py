@@ -14,9 +14,9 @@ DRAW_LIGHT_SOURCE = True
 
 BODY_DIAMETER = 5  # in voxels
 
-LIGHT_X = 50
-LIGHT_Y = 3
-LIGHT_Z = 4
+LIGHT_X = 50  # fitness is calculated based on how close volvox gets to (50, 3)
+LIGHT_Y = 3  # adjust line 21 in base.vxa accordingly
+LIGHT_Z = 4 
 
 np.random.seed(SEED)
 
@@ -48,16 +48,15 @@ radius = BODY_DIAMETER//2+1
 r2 = np.arange(-radius, radius+1)**2
 dist2 = r2[:, None, None] + r2[:, None] + r2
 sphere[dist2 <= radius**2] = 1
+
 # remove shell
 for layer in range(bz):
     body[:, :, layer] *= sphere[1:bx+1, 1:by+1, layer+1]
 
-
 # get random cilia field
-cilia_forces = restricted_cilia(body, DEBUG=True)
-# cilia_forces = 2*np.random.rand(bx,by,bz,3)-1
-cilia_forces[:,:,:,2] = 0
-cilia_forces = cilia_forces.reshape(bz, 3*bx*by)
+# body_cilia = 2*np.random.rand(bx,by,bz,3)-1
+# body_cilia[:,:,:,2] = 0
+body_cilia = restricted_cilia(body, DEBUG=True)  # different cilia
 
 # world
 wx,wy,wz = LIGHT_X+bx, LIGHT_Y+by, LIGHT_Z+bz
@@ -68,10 +67,6 @@ if DRAW_LIGHT_SOURCE > 0:
     world = np.zeros((wx,wy,wz), np.int8)
     world[:bx, :by, :bz] = body
 
-    # get random cilia field
-    cilia_forces = restricted_cilia(world, DEBUG=True)  # different cilia
-    cilia_forces = cilia_forces.reshape(wz, 3*wx*wy)
-
     # Lightbulb:
     l_size = 2
     lx = LIGHT_X-l_size//2 # light source min x
@@ -80,6 +75,11 @@ if DRAW_LIGHT_SOURCE > 0:
     LIGHT_BULB = np.ones((l_size,)*3, dtype=np.int8)*2  # light bulb is material 2
     print("light pos: " + str(lx+l_size/2-0.5) + ", " + str(ly+l_size/2-0.5) + ", " + str(lz+l_size/2-0.5) )
     world[lx:lx+l_size, ly:ly+l_size, lz:lz+l_size] = LIGHT_BULB 
+
+# reshape cilia field for world
+world_cilia = np.zeros((wx,wy,wz, 3))
+world_cilia[:bx, :by, :bz, :] = body_cilia
+world_cilia = world_cilia.reshape(wz, 3*wx*wy)
 
 # reformat data for voxcraft
 world = np.swapaxes(world, 0,2)
@@ -119,7 +119,6 @@ if RECORD_HISTORY:
     etree.SubElement(history, "RecordFixedVoxels").text = '1'
     etree.SubElement(history, "RecordCoMTraceOfEachVoxelGroupfOfThisMaterial").text = '0'  # draw CoM trace
     
-
 structure = etree.SubElement(root, "Structure")
 structure.set('replace', 'VXA.VXC.Structure')
 structure.set('Compression', 'ASCII_READABLE')
@@ -134,9 +133,9 @@ for i in range(world.shape[0]):
     layer.text = etree.CDATA(str_layer)
 
 data = etree.SubElement(structure, "BaseCiliaForce")
-for i in range(cilia_forces.shape[0]):
+for i in range(world_cilia.shape[0]):
     layer = etree.SubElement(data, "Layer")
-    str_layer = "".join([str(c) + ", " for c in cilia_forces[i]]) # other variables can be floats so they need commas
+    str_layer = "".join([str(c) + ", " for c in world_cilia[i]]) # other variables can be floats so they need commas
     layer.text = etree.CDATA(str_layer)
 
 # save the vxd to data folder
