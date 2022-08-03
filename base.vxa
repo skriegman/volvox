@@ -4,16 +4,15 @@
         <EnableCilia>1</EnableCilia>
         <UsingLightSource>1</UsingLightSource>
         <UsingVolvox>1</UsingVolvox>
-        <VolvoxLightDelay>2</VolvoxLightDelay>
-        <VolvoxLightSensitiveTime>4000</VolvoxLightSensitiveTime>
-        <VolvoxRefractoryPeriod>300</VolvoxRefractoryPeriod>
+        <LightSensitiveTime>2000</LightSensitiveTime>
+        <CiliaFactorInLight>-1</CiliaFactorInLight>
         <LightPosX>0</LightPosX>
         <LightPosY>0</LightPosY>
         <LightPosZ>0</LightPosZ>
         <LightFunction>
             <mtCOS>
                 <mtMUL>
-                <mtCONST>60</mtCONST>
+                <mtCONST>120</mtCONST>
                 <mtVAR>t</mtVAR>
                 </mtMUL>
             </mtCOS>
@@ -102,7 +101,7 @@
                 <Mechanical>
                     <isMeasured>1</isMeasured>
                     <isTarget>0</isTarget>
-                    <Cilia>1.2</Cilia>
+                    <Cilia>0.5</Cilia>
                     <LockZ>1</LockZ>
                     <Detachable>0</Detachable>
                     <lightSensitive>1</lightSensitive>
