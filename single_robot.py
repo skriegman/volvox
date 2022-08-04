@@ -65,6 +65,10 @@ for layer in range(bz):
 # body_cilia[:,:,:,2] = 0
 body_cilia = restricted_cilia(body, DEBUG=True)  # different cilia
 
+# how sensitive should each voxel be to light? Note: only the surface voxels matter.
+body_photosensitivity = np.ones((bx,by,bz))
+# body_photosensitivity = np.random.rand(bx,by,bz)
+
 # world
 world = body
 l_size = LIGHT_SIZE
@@ -103,6 +107,12 @@ world_cilia = np.zeros((wx,wy,wz, 3))
 world_cilia[wx//2-bx//2:wx//2+bx//2+1, wy//2-by//2:wy//2+by//2+1, :bz, :] = body_cilia
 world_cilia = np.swapaxes(world_cilia, 0,2)  # looks good; todo: test
 world_cilia = world_cilia.reshape(wz, 3*wx*wy)
+
+# reformat photosensitivity
+world_photosensitivity = np.zeros((wx,wy,wz))
+world_photosensitivity[wx//2-bx//2:wx//2+bx//2+1, wy//2-by//2:wy//2+by//2+1, :bz] = body_photosensitivity
+world_photosensitivity = np.swapaxes(world_photosensitivity, 0,2)  # looks good; todo: test
+world_photosensitivity = world_photosensitivity.reshape(wz, wx*wy)
 
 # reformat data for voxcraft
 world = np.swapaxes(world, 0,2)
@@ -182,6 +192,12 @@ data = etree.SubElement(structure, "BaseCiliaForce")
 for i in range(world_cilia.shape[0]):
     layer = etree.SubElement(data, "Layer")
     str_layer = "".join([str(c) + ", " for c in world_cilia[i]]) # other variables can be floats so they need commas
+    layer.text = etree.CDATA(str_layer)
+
+data = etree.SubElement(structure, "Photosensitivity")
+for i in range(world_photosensitivity.shape[0]):
+    layer = etree.SubElement(data, "Layer")
+    str_layer = "".join([str(c) + ", " for c in world_photosensitivity[i]]) # other variables can be floats so they need commas
     layer.text = etree.CDATA(str_layer)
 
 # save the vxd to data folder

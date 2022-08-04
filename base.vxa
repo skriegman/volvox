@@ -88,7 +88,7 @@
             <TempPeriod>0</TempPeriod><!--never-->
         </Thermal>
         <Gravity>
-            <GravEnabled>1</GravEnabled>
+            <GravEnabled>0</GravEnabled><!--turn on if flying away-->
             <GravAcc>-9.81</GravAcc>
             <FloorEnabled>1</FloorEnabled>
         </Gravity>
@@ -110,7 +110,7 @@
                     <isMeasured>1</isMeasured>
                     <isTarget>0</isTarget>
                     <Cilia>0.08</Cilia>
-                    <LockZ>1</LockZ>
+                    <LockZ>0</LockZ>
                     <Detachable>0</Detachable>
                     <lightSensitive>1</lightSensitive>
                     <MatModel>0</MatModel><!--0 = no failing-->
