@@ -12,11 +12,18 @@ RECORD_HISTORY = True  # saves the behavior movie
 
 DRAW_LIGHT_SOURCE = True
 
+LIGHT_SIZE = 3
+
+INCLUDE_WALLS = True
+WORLD_WIDTH = 21
+
+DRAW_WALLS = False  # make sure to turn on collisions in base.vxa:line 64 <EnableCollision>1</EnableCollision>
+
 BODY_DIAMETER = 5  # in voxels
 
-LIGHT_X = 50  # fitness is calculated based on how close volvox gets to (50, 3)
-LIGHT_Y = 3  # adjust line 21 in base.vxa accordingly
-LIGHT_Z = 4 
+LIGHT_X = 100  # fitness is calculated based on how close volvox gets to (80, 10) [line 21 in base.vxa]
+LIGHT_Y = 10
+LIGHT_Z = BODY_DIAMETER//2+1
 
 np.random.seed(SEED)
 
@@ -59,26 +66,42 @@ for layer in range(bz):
 body_cilia = restricted_cilia(body, DEBUG=True)  # different cilia
 
 # world
-wx,wy,wz = LIGHT_X+bx, LIGHT_Y+by, LIGHT_Z+bz
 world = body
+l_size = LIGHT_SIZE
+wx,wy,wz = LIGHT_X+bx, LIGHT_Y+by, max(LIGHT_Z+l_size//2+1, bz)
+
+if INCLUDE_WALLS:
+    wy = WORLD_WIDTH
+    LIGHT_X += bx-2  # light embedded in the wall
+    LIGHT_Y = WORLD_WIDTH//2
 
 if DRAW_LIGHT_SOURCE > 0:
     print("drawing light bulb in env")
     world = np.zeros((wx,wy,wz), np.int8)
-    world[:bx, :by, :bz] = body
+    world[wx//2-bx//2:wx//2+bx//2+1, wy//2-by//2:wy//2+by//2+1, :bz] = body
 
     # Lightbulb:
-    l_size = 2
     lx = LIGHT_X-l_size//2 # light source min x
     ly = LIGHT_Y-l_size//2 # min y
     lz = LIGHT_Z-l_size//2 # min z
-    LIGHT_BULB = np.ones((l_size,)*3, dtype=np.int8)*2  # light bulb is material 2
-    print("light pos: " + str(lx+l_size/2-0.5) + ", " + str(ly+l_size/2-0.5) + ", " + str(lz+l_size/2-0.5) )
-    world[lx:lx+l_size, ly:ly+l_size, lz:lz+l_size] = LIGHT_BULB 
+    print("lightA pos: " + str(l_size/2-0.5) + ", " + str(ly+l_size/2-0.5) + ", " + str(lz+l_size/2-0.5) )
+    world[:l_size, ly:ly+l_size, lz:lz+l_size] = np.ones((l_size,)*3, dtype=np.int8) * 2  # light bulb A is mat 2
+    print("lightB pos: " + str(lx+l_size/2-0.5) + ", " + str(ly+l_size/2-0.5) + ", " + str(lz+l_size/2-0.5) )
+    world[lx:lx+l_size, ly:ly+l_size, lz:lz+l_size] = np.ones((l_size,)*3, dtype=np.int8) * 3  # light bulb B is mat 3
+
+if DRAW_WALLS:
+    # add walls to world
+    world[:2, :, :bz+2] = 4  # wall
+    world[:, :2, :bz+2] = 4
+    world[-2:, :, :bz+2] = 4
+    world[:, -2:, :bz+2] = 4    
+    # world[3*wx//4:3*wx//4+2, :, :bz+2] = 4  ## debug collisions
+
 
 # reshape cilia field for world
 world_cilia = np.zeros((wx,wy,wz, 3))
-world_cilia[:bx, :by, :bz, :] = body_cilia
+world_cilia[wx//2-bx//2:wx//2+bx//2+1, wy//2-by//2:wy//2+by//2+1, :bz, :] = body_cilia
+world_cilia = np.swapaxes(world_cilia, 0,2)  # looks good; todo: test
 world_cilia = world_cilia.reshape(wz, 3*wx*wy)
 
 # reformat data for voxcraft
@@ -88,26 +111,49 @@ world = world.reshape(wz, wx*wy)
 # start vxd file
 root = etree.Element("VXD")
 
-vxa_light_pos_x = etree.SubElement(root, "LightPosX")
-vxa_light_pos_x.set('replace', 'VXA.Simulator.LightPosX')
+# Light A
+vxa_lightA_pos_x = etree.SubElement(root, "LightAPosX")
+vxa_lightA_pos_x.set('replace', 'VXA.Simulator.LightAPosX')
 if DRAW_LIGHT_SOURCE:
-    vxa_light_pos_x.text = str(lx+l_size/2-0.5)  # for drawing
+    vxa_lightA_pos_x.text = str(l_size/2-0.5)  # for drawing
 else:
-    vxa_light_pos_x.text = str(lx)
+    vxa_lightA_pos_x.text = str(0)
 
-vxa_light_pos_y = etree.SubElement(root, "LightPosY")
-vxa_light_pos_y.set('replace', 'VXA.Simulator.LightPosY')
+vxa_lightA_pos_y = etree.SubElement(root, "LightAPosY")
+vxa_lightA_pos_y.set('replace', 'VXA.Simulator.LightAPosY')
 if DRAW_LIGHT_SOURCE:
-    vxa_light_pos_y.text = str(ly+l_size/2-0.5)
+    vxa_lightA_pos_y.text = str(ly+l_size/2-0.5)
 else:
-    vxa_light_pos_y.text = str(ly)
+    vxa_lightA_pos_y.text = str(ly)
 
-vxa_light_pos_z = etree.SubElement(root, "LightPosZ")
-vxa_light_pos_z.set('replace', 'VXA.Simulator.LightPosZ')
+vxa_lightA_pos_z = etree.SubElement(root, "LightAPosZ")
+vxa_lightA_pos_z.set('replace', 'VXA.Simulator.LightAPosZ')
 if DRAW_LIGHT_SOURCE:
-    vxa_light_pos_z.text = str(lz+l_size/2-0.5)
+    vxa_lightA_pos_z.text = str(lz+l_size/2-0.5)
 else:
-    vxa_light_pos_z.text = str(lz)
+    vxa_lightA_pos_z.text = str(lz)
+
+# Light B
+vxa_lightB_pos_x = etree.SubElement(root, "LightBPosX")
+vxa_lightB_pos_x.set('replace', 'VXA.Simulator.LightBPosX')
+if DRAW_LIGHT_SOURCE:
+    vxa_lightB_pos_x.text = str(lx+l_size/2-0.5)  # for drawing
+else:
+    vxa_lightB_pos_x.text = str(lx)
+
+vxa_lightB_pos_y = etree.SubElement(root, "LightBPosY")
+vxa_lightB_pos_y.set('replace', 'VXA.Simulator.LightBPosY')
+if DRAW_LIGHT_SOURCE:
+    vxa_lightB_pos_y.text = str(ly+l_size/2-0.5)
+else:
+    vxa_lightB_pos_y.text = str(ly)
+
+vxa_lightB_pos_z = etree.SubElement(root, "lightBPosZ")
+vxa_lightB_pos_z.set('replace', 'VXA.Simulator.LightBPosZ')
+if DRAW_LIGHT_SOURCE:
+    vxa_lightB_pos_z.text = str(lz+l_size/2-0.5)
+else:
+    vxa_lightB_pos_z.text = str(lz)
 
 if RECORD_HISTORY:
     # sub.call("rm a{0}_gen{1}.hist".format(seed, pop.gen), shell=True)

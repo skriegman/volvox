@@ -3,20 +3,28 @@
     <Simulator>
         <EnableCilia>1</EnableCilia>
         <UsingLightSource>1</UsingLightSource>
-        <UsingVolvox>1</UsingVolvox>
-        <LightSensitiveTime>2000</LightSensitiveTime>
+        <UsingVolvox>0</UsingVolvox>
+        <LightSensitiveTime>500</LightSensitiveTime>
         <CiliaFactorInLight>-1</CiliaFactorInLight>
-        <LightPosX>0</LightPosX>
-        <LightPosY>0</LightPosY>
-        <LightPosZ>0</LightPosZ>
-        <LightFunction>
+        <LightAFunction>
             <mtCOS>
                 <mtMUL>
-                <mtCONST>120</mtCONST>
-                <mtVAR>t</mtVAR>
+                    <mtCONST>30</mtCONST>
+                    <mtVAR>t</mtVAR>
                 </mtMUL>
             </mtCOS>
-        </LightFunction>
+        </LightAFunction>
+        <LightBFunction>
+            <mtSUB>
+                    <mtCONST>0</mtCONST>
+                <mtCOS>
+                    <mtMUL>
+                        <mtCONST>16</mtCONST>
+                        <mtVAR>t</mtVAR>
+                    </mtMUL>
+                </mtCOS>
+            </mtSUB>
+        </LightBFunction>
         <FitnessFunction>
             <mtSUB>
                 <mtCONST>0</mtCONST>
@@ -24,21 +32,21 @@
                     <mtMUL>
                         <mtSUB>
                             <mtVAR>y</mtVAR>
-                            <mtCONST>3</mtCONST>
+                            <mtCONST>10</mtCONST>
                         </mtSUB>
                         <mtSUB>
                             <mtVAR>y</mtVAR>
-                            <mtCONST>3</mtCONST>
+                            <mtCONST>10</mtCONST>
                         </mtSUB>
                     </mtMUL>
                     <mtMUL>
                         <mtSUB>
                             <mtVAR>x</mtVAR>
-                            <mtCONST>50</mtCONST>
+                            <mtCONST>80</mtCONST>
                         </mtSUB>
                         <mtSUB>
                             <mtVAR>x</mtVAR>
-                            <mtCONST>50</mtCONST>
+                            <mtCONST>80</mtCONST>
                         </mtSUB>
                     </mtMUL>
                 </mtADD>
@@ -61,7 +69,7 @@
             <SlowDampingZ>0.01</SlowDampingZ>
         </Damping>
         <AttachDetach>
-            <EnableCollision>2</EnableCollision>
+            <EnableCollision>0</EnableCollision>
         </AttachDetach>
         <!-- <ForceField>
             <z_forcefield>
@@ -101,7 +109,7 @@
                 <Mechanical>
                     <isMeasured>1</isMeasured>
                     <isTarget>0</isTarget>
-                    <Cilia>0.5</Cilia>
+                    <Cilia>0.08</Cilia>
                     <LockZ>1</LockZ>
                     <Detachable>0</Detachable>
                     <lightSensitive>1</lightSensitive>
@@ -117,7 +125,7 @@
                 </Mechanical>
             </Material>
             <Material ID="2">
-                <Name>Light</Name>
+                <Name>LightA</Name>
                 <Display>
                     <Red>1</Red>
                     <Green>1</Green>
@@ -125,9 +133,56 @@
                     <Alpha>0.5</Alpha>
                 </Display>
                 <Mechanical>
-                    <isLightSource>1</isLightSource>
+                    <isLightSourceA>1</isLightSourceA>
                     <Fixed>1</Fixed>
                     <Transparent>1</Transparent>
+                    <Detachable>0</Detachable>
+                    <MatModel>0</MatModel>
+                    <Elastic_Mod>1e+03</Elastic_Mod>
+                    <Fail_Stress>0</Fail_Stress>
+                    <Density>1e+03</Density>
+                    <Poissons_Ratio>0.5</Poissons_Ratio>
+                    <CTE>0</CTE>
+                    <MaterialTempPhase>0</MaterialTempPhase>
+                    <uStatic>0</uStatic>
+                    <uDynamic>0</uDynamic>
+                </Mechanical>
+            </Material>
+            <Material ID="3">
+                <Name>LightB</Name>
+                <Display>
+                    <Red>1</Red>
+                    <Green>1</Green>
+                    <Blue>1</Blue>
+                    <Alpha>0.5</Alpha>
+                </Display>
+                <Mechanical>
+                    <isLightSourceB>1</isLightSourceB>
+                    <Fixed>1</Fixed>
+                    <Transparent>1</Transparent>
+                    <Detachable>0</Detachable>
+                    <MatModel>0</MatModel>
+                    <Elastic_Mod>1e+03</Elastic_Mod>
+                    <Fail_Stress>0</Fail_Stress>
+                    <Density>1e+03</Density>
+                    <Poissons_Ratio>0.5</Poissons_Ratio>
+                    <CTE>0</CTE>
+                    <MaterialTempPhase>0</MaterialTempPhase>
+                    <uStatic>0</uStatic>
+                    <uDynamic>0</uDynamic>
+                </Mechanical>
+            </Material>
+            <Material ID="4">
+                <Name>Wall</Name>
+                <Display>
+                    <Red>0.1</Red>
+                    <Green>0.1</Green>
+                    <Blue>0.1</Blue>
+                    <Alpha>0.5</Alpha>
+                </Display>
+                <Mechanical>
+                    <Fixed>1</Fixed>
+                    <Transparent>1</Transparent><!--tmp-->
                     <Detachable>0</Detachable>
                     <MatModel>0</MatModel>
                     <Elastic_Mod>1e+03</Elastic_Mod>
