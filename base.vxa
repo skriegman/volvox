@@ -1,55 +1,39 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <VXA Version="1.1">
     <Simulator>
+        <!-- <RandomSeed>0</RandomSeed> -->
         <EnableCilia>1</EnableCilia>
         <UsingLightSource>1</UsingLightSource>
-        <UsingVolvox>0</UsingVolvox>
-        <LightSensitiveTime>500</LightSensitiveTime>
+        <RandomizeLightA>0</RandomizeLightA>
+        <RandomizeLightB>1</RandomizeLightB>
+        <UsingVolvox>1</UsingVolvox>
         <CiliaFactorInLight>-1</CiliaFactorInLight>
+        <!-- <LightAFunction>
+            <mtCONST>0</mtCONST>
+        </LightAFunction>
+        <LightBFunction>
+            <mtCONST>1</mtCONST>
+        </LightBFunction> -->
         <LightAFunction>
             <mtCOS>
                 <mtMUL>
-                    <mtCONST>30</mtCONST>
+                    <mtCONST>60</mtCONST>
                     <mtVAR>t</mtVAR>
                 </mtMUL>
             </mtCOS>
         </LightAFunction>
         <LightBFunction>
-            <mtSUB>
-                    <mtCONST>0</mtCONST>
-                <mtCOS>
-                    <mtMUL>
-                        <mtCONST>16</mtCONST>
-                        <mtVAR>t</mtVAR>
-                    </mtMUL>
-                </mtCOS>
-            </mtSUB>
+            <mtCOS>
+                <mtMUL>
+                    <mtCONST>120</mtCONST>
+                    <mtVAR>t</mtVAR>
+                </mtMUL>
+            </mtCOS>
         </LightBFunction>
         <FitnessFunction>
             <mtSUB>
                 <mtCONST>0</mtCONST>
-                <mtADD>
-                    <mtMUL>
-                        <mtSUB>
-                            <mtVAR>y</mtVAR>
-                            <mtCONST>10</mtCONST>
-                        </mtSUB>
-                        <mtSUB>
-                            <mtVAR>y</mtVAR>
-                            <mtCONST>10</mtCONST>
-                        </mtSUB>
-                    </mtMUL>
-                    <mtMUL>
-                        <mtSUB>
-                            <mtVAR>x</mtVAR>
-                            <mtCONST>80</mtCONST>
-                        </mtSUB>
-                        <mtSUB>
-                            <mtVAR>x</mtVAR>
-                            <mtCONST>80</mtCONST>
-                        </mtSUB>
-                    </mtMUL>
-                </mtADD>
+                <mtVAR>x</mtVAR>
             </mtSUB>
         </FitnessFunction>
         <Integration>
@@ -69,9 +53,9 @@
             <SlowDampingZ>0.01</SlowDampingZ>
         </Damping>
         <AttachDetach>
-            <EnableCollision>0</EnableCollision>
+            <EnableCollision>0</EnableCollision><!--turn on with walls or multiple bodies-->
         </AttachDetach>
-        <!-- <ForceField>
+        <ForceField>
             <z_forcefield>
                 <mtMUL>
                     <mtCONST>-0.01</mtCONST>
@@ -81,14 +65,14 @@
                     </mtGREATERTHAN>
                 </mtMUL>
             </z_forcefield>
-        </ForceField> -->
+        </ForceField>
     </Simulator>
     <Environment>
         <Thermal>
             <TempPeriod>0</TempPeriod><!--never-->
         </Thermal>
         <Gravity>
-            <GravEnabled>0</GravEnabled><!--turn on if flying away-->
+            <GravEnabled>1</GravEnabled><!--turn on if flying away-->
             <GravAcc>-9.81</GravAcc>
             <FloorEnabled>1</FloorEnabled>
         </Gravity>
@@ -175,10 +159,10 @@
             <Material ID="4">
                 <Name>Wall</Name>
                 <Display>
-                    <Red>0.1</Red>
+                    <Red>0.5</Red>
                     <Green>0.1</Green>
-                    <Blue>0.1</Blue>
-                    <Alpha>0.5</Alpha>
+                    <Blue>0.5</Blue>
+                    <Alpha>0.9</Alpha>
                 </Display>
                 <Mechanical>
                     <Fixed>1</Fixed>
