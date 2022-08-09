@@ -22,3 +22,6 @@ Now with python3 run the script with seed 0:
 
 ```python single_robot.py 0``` 
 
+<br>
+
+![image](https://github.com/skriegman/volvox/blob/main/mov/output.gif) <br>
