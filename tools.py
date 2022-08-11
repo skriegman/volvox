@@ -13,13 +13,21 @@ def left(x,y,z,d=1):
 def right(x,y,z,d=1):
     return x+d,y,z
 
+def up(x,y,z,d=1):
+    return x,y,z+d
+
+def down(x,y,z,d=1):
+    return x,y,z-d
+
 def get_empty_neighbor_positons(body, pos):
     empty_neigh = []
-    for direction in [front, back, left, right]:
+    for direction in [front, back, left, right, up, down]:
         neigh_pos = direction(pos[0], pos[1], pos[2])
 
         # Checking if the neighboring voxels is in array bounds
-        if neigh_pos[0]>=0 and neigh_pos[0]<body.shape[0] and neigh_pos[1]>=0 and neigh_pos[1]<body.shape[1]:
+        if neigh_pos[0]>=0 and neigh_pos[0]<body.shape[0] and \
+            neigh_pos[1]>=0 and neigh_pos[1]<body.shape[1] and \
+                neigh_pos[2]>=0 and neigh_pos[2]<body.shape[2]:
 
             if body[neigh_pos] == 0: # in bounds and empty
                 empty_neigh.append(neigh_pos)
@@ -53,18 +61,22 @@ def restricted_cilia(body, DEBUG=False):
                         # voxels can push only
                         x_comp = curr_pos[0]-empty_neigh_pos[0]
                         y_comp = curr_pos[1]-empty_neigh_pos[1]
-                        z_comp = curr_pos[2]-empty_neigh_pos[2] # should always be 0
-                        assert z_comp==0
+                        z_comp = curr_pos[2]-empty_neigh_pos[2]
+                        # assert z_comp==0
                         
                         # by default all of the vectors are unit vectors because the distance between voxels is 1
                         vectors.append([x_comp,y_comp,z_comp])
 
                     # DEBUG keeps thrusters in the center
                     if DEBUG:
-                        if len(vectors)==1:
-                            cilia[x,y,z,:] = vectors[0]
-                        elif len(vectors)==2:
-                            cilia[x,y,z,:] = [a+b for a,b in zip(vectors[0],vectors[1])]
+                        # if len(vectors)==1:
+                        #     cilia[x,y,z,:] = vectors[0]
+                        # elif len(vectors)==2:
+                        #     cilia[x,y,z,:] = [a+b for a,b in zip(vectors[0],vectors[1])]
+                        for v in vectors:
+                            cilia[x,y,z,0] += v[0]
+                            cilia[x,y,z,1] += v[1]
+                            cilia[x,y,z,2] += v[2]                       
                         # print(cilia[x,y,z,:])
                         continue
 

@@ -5,6 +5,19 @@ import sys
 # from plot import plot_cilia_vectors
 from tools import restricted_cilia
 
+"""
+
+Note: when we change the cilia params it can cause the bot to spin too fast and explode (sim will diverge).
+
+Things can be done to make the sim stable again:
+
+Lower the cilia magnitude (base.vxa: line 96).
+
+Lower dtfrac (base.vxa: line 40) but this makes sim slow.
+
+Alter force field, gravity, friction, body size, density/elasticity.
+
+"""
 
 SEED = int(sys.argv[1])
 
@@ -29,7 +42,7 @@ LIGHT_Z = BODY_DIAMETER//2+1
 np.random.seed(SEED)
 
 # get new voxcraft build
-BUILD_DIR = "/users/s/k/skriegma/phototaxis/voxcraft-sim/build"
+BUILD_DIR = "/home/slk6335/voxcraft-sim/build"
 sub.call("cp {}/voxcraft-sim .".format(BUILD_DIR), shell=True)
 sub.call("cp {}/vx3_node_worker .".format(BUILD_DIR), shell=True)
 

@@ -93,7 +93,7 @@
                 <Mechanical>
                     <isMeasured>1</isMeasured>
                     <isTarget>0</isTarget>
-                    <Cilia>0.08</Cilia>
+                    <Cilia>0.3</Cilia>
                     <LockZ>0</LockZ>
                     <Detachable>0</Detachable>
                     <lightSensitive>1</lightSensitive>
