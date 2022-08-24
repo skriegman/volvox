@@ -17,6 +17,10 @@ Lower dtfrac (base.vxa: line 40) but this makes sim slow.
 
 Alter force field, gravity, friction, body size, density/elasticity.
 
+TODO: 
+RENAME: activationTimeConstant --> adaptationTime
+RENAME: recoveryTimeConstant --> responseTime
+
 """
 
 SEED = int(sys.argv[1])
@@ -75,6 +79,12 @@ for layer in range(bz):
     body[:, :, layer] *= sphere[1:bx+1, 1:by+1, layer+1]
 
 # add perpendicular cilia field
+# for each voxel, where is the cilia force pointing; 
+# first 3 params are voxel location in body (bx,by,bz); the 4th param is x,y,z of cilia vector
+# the cilia force vector is relative volvox rotatation; volvox starts upright with world's x,y,z 
+# body_cilia = np.zeros((6,6,6,3)) -> 6x6x6 voxels; for each voxel there is a 3D cilia force vector pushing/pulling on the voxel
+# body_cilia[0,2,1,:] = np.array([0,-1,1])  x=0,y=2,z=1 voxel has cilia force (0,-1,1)
+# (0,0,-1) points down
 body_cilia = restricted_cilia(body, DEBUG=True)  # DEBUG means all cilia apply perpendicular force
 # debug cilia field:
 # body_cilia = 2*np.random.rand(bx,by,bz,3)-1  # random cilia

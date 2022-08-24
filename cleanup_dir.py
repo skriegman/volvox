@@ -12,6 +12,12 @@ sub.call("rm a*.hist", shell=True)
 # remove old sim output.xml to save new stats
 sub.call("rm output*.xml", shell=True)
 
+# remove cmas stuff
+sub.call("rm -r outcmaes", shell=True)
+
+# remove error files
+sub.call("rm core.*", shell=True)
+
 # remove compiled python artifacts
 sub.call("rm *.pyc", shell=True)
 sub.call("rm -r __pycache__", shell=True)
